@@ -2,6 +2,74 @@
 
 Public Class FrmDbDocumentor
     Private isSearching As Boolean = False
+    Private sortColumn As Integer = -1
+
+#Region "ListViewComparer for sorting"
+    'From https://msdn.microsoft.com/en-us/library/ms996467.aspx
+    'changing Parse() with TryParse() by Warayra
+    Class ListViewItemComparer
+        Implements IComparer
+        Private col As Integer
+        Private order As SortOrder
+
+        Public Sub New()
+            col = 0
+            order = SortOrder.Ascending
+        End Sub
+
+        Public Sub New(column As Integer, order As SortOrder)
+            col = column
+            Me.order = order
+        End Sub
+
+        Public Function Compare(x As Object, y As Object) As Integer _
+                        Implements System.Collections.IComparer.Compare
+            Dim returnVal As Integer = -1
+            ' Determine whether the type being compared is a date type.
+            Try
+                ' Parse the two objects passed as a parameter as a DateTime.
+                Dim firstDate, secondDate As System.DateTime
+                If System.DateTime.TryParse(CType(x, ListViewItem).SubItems(col).Text, firstDate) Then
+                    System.DateTime.TryParse(CType(y, ListViewItem).SubItems(col).Text, secondDate)
+                    ' Compare the two dates.
+                    returnVal = DateTime.Compare(firstDate, secondDate)
+                Else
+                    ' If neither compared object has a valid date format, 
+                    ' compare as a string.
+                    ' Compare the two items as a string.
+                    returnVal = [String].Compare(CType(x,
+                              ListViewItem).SubItems(col).Text, CType(y, ListViewItem).SubItems(col).Text)
+                End If
+            Catch ex As Exception
+                MessageBox.Show(ex.Message, "Compare error", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End Try
+            ' Determine whether the sort order is descending.
+            If order = SortOrder.Descending Then
+                ' Invert the value returned by String.Compare.
+                returnVal *= -1
+            End If
+            Return returnVal
+        End Function
+    End Class
+#End Region
+
+    Friend Sub DisableAll()
+        gbSelection.Enabled = False
+        LvComponents.Items.Clear()
+        LvObjects.Items.Clear()
+        TxtComponentDescription.Text = ""
+        TxtObjectDescription.Text = ""
+        For Each ctrl As Control In TableLayoutPanel.Controls
+            ctrl.Enabled = False
+        Next
+    End Sub
+
+    Friend Sub EnableAll()
+        gbSelection.Enabled = True
+        For Each ctrl As Control In TableLayoutPanel.Controls
+            ctrl.Enabled = True
+        Next
+    End Sub
 
     Private Sub FillComponentsList()
         Dim lastItemIndex As Integer = -1
@@ -16,23 +84,23 @@ Public Class FrmDbDocumentor
         SQL = "EXEC [docum].[SpConDescriptions]"
         SQL &= " @ObjectName='" & LvObjects.SelectedItems(0).SubItems(0).Text & "'"
         Try
-            rset = conx.Execute(SQL)
-            If Not rset.EOF Then
+            Rset = Conx.Execute(SQL)
+            If Not Rset.EOF Then
                 If LvComponents.Columns.Count = 0 Then
-                    For idxFld As Integer = 0 To (rset.Fields.Count - 1)
-                        LvComponents.Columns.Add(rset.Fields(idxFld).Name)
+                    For idxFld As Integer = 0 To (Rset.Fields.Count - 1)
+                        LvComponents.Columns.Add(Rset.Fields(idxFld).Name)
                     Next
                 End If
             End If
-            Dim aFields(rset.Fields.Count) As String
-            Do While Not rset.EOF
-                For idxFld As Integer = 0 To (rset.Fields.Count - 1)
-                    aFields(idxFld) = rset(idxFld).Value.ToString
+            Dim aFields(Rset.Fields.Count) As String
+            Do While Not Rset.EOF
+                For idxFld As Integer = 0 To (Rset.Fields.Count - 1)
+                    aFields(idxFld) = Rset(idxFld).Value.ToString
                 Next
                 LvComponents.Items.Add(New ListViewItem(aFields))
-                rset.MoveNext()
+                Rset.MoveNext()
             Loop
-            rset.Close()
+            Rset.Close()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -73,23 +141,23 @@ Public Class FrmDbDocumentor
         '        SQL = "select sv.name, sv.create_date, sv.modify_date from sys.views sv inner join sys.schemas ss on ss.schema_id=sv.schema_id where ss.name='dbo' order by sv.name"
         'End Select
         Try
-            rset = conx.Execute(SQL)
-            If Not rset.EOF Then
+            Rset = Conx.Execute(SQL)
+            If Not Rset.EOF Then
                 If LvObjects.Columns.Count = 0 Then
-                    For idxFld As Integer = 0 To (rset.Fields.Count - 1)
-                        LvObjects.Columns.Add(rset.Fields(idxFld).Name)
+                    For idxFld As Integer = 0 To (Rset.Fields.Count - 1)
+                        LvObjects.Columns.Add(Rset.Fields(idxFld).Name)
                     Next
                 End If
             End If
-            Dim aFields(rset.Fields.Count) As String
-            Do While Not rset.EOF
-                For idxFld As Integer = 0 To (rset.Fields.Count - 1)
-                    aFields(idxFld) = rset(idxFld).Value.ToString
+            Dim aFields(Rset.Fields.Count) As String
+            Do While Not Rset.EOF
+                For idxFld As Integer = 0 To (Rset.Fields.Count - 1)
+                    aFields(idxFld) = Rset(idxFld).Value.ToString
                 Next
                 LvObjects.Items.Add(New ListViewItem(aFields))
-                rset.MoveNext()
+                Rset.MoveNext()
             Loop
-            rset.Close()
+            Rset.Close()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -107,12 +175,12 @@ Public Class FrmDbDocumentor
         Cursor.Current = Cursors.AppStarting
         SQL = "select name from sys.databases where name like 'VP%' or name = 'MONITOR' or name = 'PRU'"
         Try
-            rset = conx.Execute(SQL)
-            Do While Not rset.EOF
-                cbDatabases.Items.Add(rset("name").Value.ToString)
-                rset.MoveNext()
+            Rset = Conx.Execute(SQL)
+            Do While Not Rset.EOF
+                cbDatabases.Items.Add(Rset("name").Value.ToString)
+                Rset.MoveNext()
             Loop
-            rset.Close()
+            Rset.Close()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -141,7 +209,7 @@ Public Class FrmDbDocumentor
     Private Sub CbDatabases_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbDatabases.SelectedIndexChanged
         Dim SQL As String = "USE [" & cbDatabases.SelectedItem.ToString & "];"
         Try
-            rset = conx.Execute(SQL)
+            Rset = Conx.Execute(SQL)
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -150,10 +218,6 @@ Public Class FrmDbDocumentor
     Private Sub CbObjectType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbObjectType.SelectedIndexChanged
         If cbObjectType.SelectedIndex < 0 Then Exit Sub
         Call FillObjectsList()
-    End Sub
-
-    Private Sub FrmDbDocumentor_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        conx.Close()
     End Sub
 
     Private Sub LvObjects_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LvObjects.SelectedIndexChanged
@@ -191,7 +255,7 @@ Public Class FrmDbDocumentor
         SQL &= " @ObjectName='" & LvObjects.SelectedItems(0).SubItems(0).Text & "'"
         SQL &= ",@Description='" & TxtObjectDescription.Text & "'"
         Try
-            conx.Execute(SQL)
+            Conx.Execute(SQL)
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -204,13 +268,13 @@ Public Class FrmDbDocumentor
         If LvObjects.SelectedItems.Count = 0 Then Exit Sub
         If LvComponents.SelectedItems.Count = 0 Then Exit Sub
 
-        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.AppStarting
+        Cursor.Current = Cursors.AppStarting
         SQL = "EXEC [docum].[SpUpdDescriptions]"
         SQL &= " @ObjectName='" & LvObjects.SelectedItems(0).SubItems(0).Text & "'"
         SQL &= ",@SubObjectName='" & LvComponents.SelectedItems(0).SubItems(0).Text & "'"
         SQL &= ",@Description='" & TxtComponentDescription.Text & "'"
         Try
-            conx.Execute(SQL)
+            Conx.Execute(SQL)
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
@@ -227,16 +291,40 @@ Public Class FrmDbDocumentor
     End Sub
 
     Private Sub BtConnection_Click(sender As Object, e As EventArgs) Handles BtConnection.Click
+        Cursor.Current = Cursors.AppStarting
         If BtConnection.Text = "Connect" Then
-            If Not OpenDBConnection(TxtServer.Text, TxtInstance.Text, TxtUser.Text, TxtPassword.Text) Then End
-            BtConnection.Image = My.Resources.DataConnection_Connected_1061
+            If Not OpenDBConnection(TxtServer.Text, TxtInstance.Text, "", TxtUser.Text, TxtPassword.Text) Then End
+            BtConnection.Image = My.Resources.Disconnect_9957
             BtConnection.Text = "Disconnect"
             Call LoadDatabases()
         Else
-            BtConnection.Image = My.Resources.DataConnection_NotConnected_1059
+            BtConnection.Image = My.Resources.AddConnection_477
             BtConnection.Text = "Connect"
             cbDatabases.Items.Clear()
-            conx.Close()
+            Conx.Close()
         End If
+        Cursor.Current = Cursors.Default
+    End Sub
+
+    Private Sub LvObjects_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles LvObjects.ColumnClick
+        ' Determine whether the column is the same as the last column clicked.
+        If e.Column <> sortColumn Then
+            ' Set the sort column to the new column.
+            sortColumn = e.Column
+            ' Set the sort order to ascending by default.
+            LvObjects.Sorting = SortOrder.Ascending
+        Else
+            ' Determine what the last sort order was and change it.
+            If LvObjects.Sorting = SortOrder.Ascending Then
+                LvObjects.Sorting = SortOrder.Descending
+            Else
+                LvObjects.Sorting = SortOrder.Ascending
+            End If
+        End If
+        ' Call the sort method to manually sort.
+        LvObjects.Sort()
+        ' Set the ListViewItemSorter property to a new ListViewItemComparer
+        ' object.
+        LvObjects.ListViewItemSorter = New ListViewItemComparer(e.Column, LvObjects.Sorting)
     End Sub
 End Class

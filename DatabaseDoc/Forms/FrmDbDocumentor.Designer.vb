@@ -51,11 +51,11 @@ Partial Class FrmDbDocumentor
         Me.Label6 = New System.Windows.Forms.Label()
         Me.gbSelection = New System.Windows.Forms.GroupBox()
         Me.gbConnection = New System.Windows.Forms.GroupBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.TxtUser = New System.Windows.Forms.TextBox()
+        Me.BtConnection = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TxtPassword = New System.Windows.Forms.TextBox()
-        Me.BtConnection = New System.Windows.Forms.Button()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.TxtUser = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel.SuspendLayout()
         Me.gbSelection.SuspendLayout()
         Me.gbConnection.SuspendLayout()
@@ -104,14 +104,15 @@ Partial Class FrmDbDocumentor
         '
         Me.LvObjects.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colObjName, Me.colObjCreateDate, Me.colObjModifyDate, Me.colObjDescription})
         Me.LvObjects.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LvObjects.Enabled = False
         Me.LvObjects.FullRowSelect = True
-        Me.LvObjects.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.LvObjects.HideSelection = False
         Me.LvObjects.Location = New System.Drawing.Point(3, 23)
         Me.LvObjects.MultiSelect = False
         Me.LvObjects.Name = "LvObjects"
         Me.TableLayoutPanel.SetRowSpan(Me.LvObjects, 2)
         Me.LvObjects.Size = New System.Drawing.Size(586, 220)
+        Me.LvObjects.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.LvObjects.TabIndex = 1
         Me.LvObjects.UseCompatibleStateImageBehavior = False
         Me.LvObjects.View = System.Windows.Forms.View.Details
@@ -139,6 +140,7 @@ Partial Class FrmDbDocumentor
         'TxtObjectDescription
         '
         Me.TxtObjectDescription.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TxtObjectDescription.Enabled = False
         Me.TxtObjectDescription.Location = New System.Drawing.Point(595, 23)
         Me.TxtObjectDescription.MaxLength = 7500
         Me.TxtObjectDescription.Multiline = True
@@ -151,6 +153,7 @@ Partial Class FrmDbDocumentor
         '
         Me.LvComponents.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colCompName, Me.colCompDataType, Me.colCompDescription})
         Me.LvComponents.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LvComponents.Enabled = False
         Me.LvComponents.FullRowSelect = True
         Me.LvComponents.HideSelection = False
         Me.LvComponents.Location = New System.Drawing.Point(3, 269)
@@ -180,6 +183,7 @@ Partial Class FrmDbDocumentor
         'TxtComponentDescription
         '
         Me.TxtComponentDescription.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TxtComponentDescription.Enabled = False
         Me.TxtComponentDescription.Location = New System.Drawing.Point(595, 269)
         Me.TxtComponentDescription.MaxLength = 7500
         Me.TxtComponentDescription.Multiline = True
@@ -209,6 +213,7 @@ Partial Class FrmDbDocumentor
         'BtUpdObjDesc
         '
         Me.BtUpdObjDesc.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.BtUpdObjDesc.Enabled = False
         Me.BtUpdObjDesc.Location = New System.Drawing.Point(595, 219)
         Me.BtUpdObjDesc.Name = "BtUpdObjDesc"
         Me.BtUpdObjDesc.Size = New System.Drawing.Size(316, 24)
@@ -219,6 +224,7 @@ Partial Class FrmDbDocumentor
         'BtUpdCompDesc
         '
         Me.BtUpdCompDesc.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.BtUpdCompDesc.Enabled = False
         Me.BtUpdCompDesc.Location = New System.Drawing.Point(595, 465)
         Me.BtUpdCompDesc.Name = "BtUpdCompDesc"
         Me.BtUpdCompDesc.Size = New System.Drawing.Size(316, 24)
@@ -327,6 +333,7 @@ Partial Class FrmDbDocumentor
         Me.gbSelection.Controls.Add(Me.Label1)
         Me.gbSelection.Controls.Add(Me.Label2)
         Me.gbSelection.Controls.Add(Me.cbObjectType)
+        Me.gbSelection.Enabled = False
         Me.gbSelection.Location = New System.Drawing.Point(4, 45)
         Me.gbSelection.Name = "gbSelection"
         Me.gbSelection.Size = New System.Drawing.Size(914, 65)
@@ -353,23 +360,19 @@ Partial Class FrmDbDocumentor
         Me.gbConnection.TabStop = False
         Me.gbConnection.Text = "Connect to..."
         '
-        'Label7
+        'BtConnection
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(420, 17)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(32, 13)
-        Me.Label7.TabIndex = 12
-        Me.Label7.Text = "User:"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TxtUser
-        '
-        Me.TxtUser.Location = New System.Drawing.Point(458, 14)
-        Me.TxtUser.MaxLength = 30
-        Me.TxtUser.Name = "TxtUser"
-        Me.TxtUser.Size = New System.Drawing.Size(96, 20)
-        Me.TxtUser.TabIndex = 13
+        Me.BtConnection.AutoSize = True
+        Me.BtConnection.Image = Global.SqlServerDBDoc.My.Resources.Resources.AddConnection_477
+        Me.BtConnection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.BtConnection.Location = New System.Drawing.Point(724, 13)
+        Me.BtConnection.Name = "BtConnection"
+        Me.BtConnection.Size = New System.Drawing.Size(78, 23)
+        Me.BtConnection.TabIndex = 16
+        Me.BtConnection.Text = "Connect"
+        Me.BtConnection.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.BtConnection.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.BtConnection.UseVisualStyleBackColor = True
         '
         'Label8
         '
@@ -390,19 +393,23 @@ Partial Class FrmDbDocumentor
         Me.TxtPassword.Size = New System.Drawing.Size(96, 20)
         Me.TxtPassword.TabIndex = 15
         '
-        'BtConnection
+        'Label7
         '
-        Me.BtConnection.AutoSize = True
-        Me.BtConnection.Image = Global.SqlServerDBDoc.My.Resources.Resources.DataConnection_NotConnected_1059
-        Me.BtConnection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.BtConnection.Location = New System.Drawing.Point(724, 13)
-        Me.BtConnection.Name = "BtConnection"
-        Me.BtConnection.Size = New System.Drawing.Size(78, 23)
-        Me.BtConnection.TabIndex = 16
-        Me.BtConnection.Text = "Connect"
-        Me.BtConnection.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.BtConnection.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.BtConnection.UseVisualStyleBackColor = True
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(420, 17)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(32, 13)
+        Me.Label7.TabIndex = 12
+        Me.Label7.Text = "User:"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TxtUser
+        '
+        Me.TxtUser.Location = New System.Drawing.Point(458, 14)
+        Me.TxtUser.MaxLength = 30
+        Me.TxtUser.Name = "TxtUser"
+        Me.TxtUser.Size = New System.Drawing.Size(96, 20)
+        Me.TxtUser.TabIndex = 13
         '
         'FrmDbDocumentor
         '

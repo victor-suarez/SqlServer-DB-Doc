@@ -63,9 +63,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property DataConnection_Connected_1061() As System.Drawing.Bitmap
+        Friend ReadOnly Property AddConnection_477() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("DataConnection_Connected_1061", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("AddConnection_477", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -73,9 +73,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property DataConnection_NotConnected_1059() As System.Drawing.Bitmap
+        Friend ReadOnly Property Disconnect_9957() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("DataConnection_NotConnected_1059", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Disconnect_9957", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
