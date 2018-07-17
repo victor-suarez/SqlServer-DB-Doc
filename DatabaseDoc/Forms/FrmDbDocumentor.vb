@@ -102,7 +102,9 @@ Public Class FrmDbDocumentor
             Loop
             Rset.Close()
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
         LvComponents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
         'Here is a bug! but I don't know which...
@@ -159,7 +161,9 @@ Public Class FrmDbDocumentor
             Loop
             Rset.Close()
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
         LvObjects.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
         'Here is a bug! but I don't know which...
@@ -182,7 +186,9 @@ Public Class FrmDbDocumentor
             Loop
             Rset.Close()
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
         Cursor.Current = Cursors.Default
     End Sub
@@ -211,7 +217,9 @@ Public Class FrmDbDocumentor
         Try
             Rset = Conx.Execute(SQL)
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
     End Sub
 
@@ -257,7 +265,9 @@ Public Class FrmDbDocumentor
         Try
             Conx.Execute(SQL)
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
         Call FillObjectsList()
     End Sub
@@ -276,7 +286,9 @@ Public Class FrmDbDocumentor
         Try
             Conx.Execute(SQL)
         Catch ex As Exception
+            Debug.Print(ex.Source & ":" & ex.Message)
             MessageBox.Show(ex.Message, "Execute error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Call ReConnect()
         End Try
         Call FillComponentsList()
     End Sub
@@ -293,10 +305,11 @@ Public Class FrmDbDocumentor
     Private Sub BtConnection_Click(sender As Object, e As EventArgs) Handles BtConnection.Click
         Cursor.Current = Cursors.AppStarting
         If BtConnection.Text = "Connect" Then
-            If Not OpenDBConnection(TxtServer.Text, TxtInstance.Text, "", TxtUser.Text, TxtPassword.Text) Then End
-            BtConnection.Image = My.Resources.Disconnect_9957
-            BtConnection.Text = "Disconnect"
-            Call LoadDatabases()
+            If OpenDBConnection(TxtServer.Text, TxtInstance.Text, "", TxtUser.Text, TxtPassword.Text) Then
+                BtConnection.Image = My.Resources.Disconnect_9957
+                BtConnection.Text = "Disconnect"
+                Call LoadDatabases()
+            End If
         Else
             BtConnection.Image = My.Resources.AddConnection_477
             BtConnection.Text = "Connect"

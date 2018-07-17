@@ -28,6 +28,21 @@ Module ModConex
         End Try
     End Function
 
+    Friend Sub ReConnect()
+        If Conx.State = ADODB.ObjectStateEnum.adStateOpen Then
+            Conx.Close()
+        End If
+        Try
+            If OpenDBConnection(My.Settings.Server, My.Settings.Instance, My.Settings.Database, My.Settings.User, My.Settings.Password) Then
+                SQL = "USE [" & FrmDbDocumentor.cbDatabases.SelectedItem.ToString & "];"
+                Rset = Conx.Execute(SQL)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message & " The program will close.", "Re-connect error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            End
+        End Try
+    End Sub
+
     Private Sub SaveLastConnectionStr(Server As String, Instance As String, Database As String, User As String, Password As String)
         My.Settings.Server = Server
         My.Settings.Instance = Instance
