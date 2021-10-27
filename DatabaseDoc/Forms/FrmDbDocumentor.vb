@@ -109,12 +109,12 @@ Public Class FrmDbDocumentor
         LvComponents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
         'Here is a bug! but I don't know which...
         If lastItemIndex > -1 AndAlso LvComponents.Items.Count >= lastItemIndex Then
-            Try
-                LvComponents.SelectedIndices.Add(lastItemIndex)
-                LvComponents.SelectedItems(0).EnsureVisible()
-            Catch ex As Exception
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            End Try
+            'Try
+            LvComponents.SelectedIndices.Add(lastItemIndex)
+            LvComponents.SelectedItems(0).EnsureVisible()
+            'Catch ex As Exception
+            'MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            'End Try
         End If
         lblComponents.Text = "Components: (" & LvComponents.Items.Count() & ")"
         Cursor.Current = Cursors.Default
@@ -167,7 +167,7 @@ Public Class FrmDbDocumentor
         End Try
         LvObjects.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
         'Here is a bug! but I don't know which...
-        If lastItemIndex > -1 AndAlso LvObjects.Items.Count >= lastItemIndex Then
+        If lastItemIndex > -1 And LvObjects.Items.Count >= lastItemIndex Then
             LvObjects.SelectedIndices.Add(lastItemIndex)
             LvObjects.SelectedItems(0).EnsureVisible()
         End If
@@ -225,6 +225,7 @@ Public Class FrmDbDocumentor
 
     Private Sub CbObjectType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbObjectType.SelectedIndexChanged
         If cbObjectType.SelectedIndex < 0 Then Exit Sub
+        LvObjects.Items.Clear()
         Call FillObjectsList()
     End Sub
 
