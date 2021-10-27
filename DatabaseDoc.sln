@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SqlServer DB Doc", "DatabaseDoc\SqlServer DB Doc.vbproj", "{F832D1B7-603F-4BBA-B4AE-B50D53323E5F}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DocDatabase", "DocDatabase\DocDatabase.sqlproj", "{68680379-19C1-4D80-9608-8B79756D8F30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,12 @@ Global
 		{F832D1B7-603F-4BBA-B4AE-B50D53323E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F832D1B7-603F-4BBA-B4AE-B50D53323E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F832D1B7-603F-4BBA-B4AE-B50D53323E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68680379-19C1-4D80-9608-8B79756D8F30}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
